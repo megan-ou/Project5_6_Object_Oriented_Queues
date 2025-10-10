@@ -1,6 +1,4 @@
 import math
-
-from tenacity import retry_unless_exception_type
 from toolz import isiterable
 from numbers import Number
 
@@ -18,25 +16,11 @@ class BaseQueue:
             lamda (number): average rate of arrival (scalar or iterable)
             mu (number): average rate of service completion
         """
-        #TODO: Should there be error checking both in here and in the setters?
-        # and should I change any of the is_valid and is_feasible code?
-        #TODO: Google docstrings?
-        #TODO: Unit testing?
-        #TODO: Difference between ro and utilization
-        #TODO: Is it okay to set attributes to none?
-        #TODO: What is recalc_needed? It is different from the other properties in the UML diagram
-        self._lamda = lamda
-        self._mu = mu
+        self.lamda = lamda
+        self.mu = mu
         self._lq = None
         self._p0 = None
-        #TODO: no underscore?
-        self.recalc_needed = False
-        self._l = None
-        self._r = None
-        self._ro = None
-        self._w = None
-        self._wq = None
-        self._utilization = None
+        self._recalc_needed = False
 
     def __str__(self):
         """
@@ -46,6 +30,7 @@ class BaseQueue:
         """
         #TODO
 
+
     @property
     def lamda(self):
         return self._lamda
@@ -53,8 +38,14 @@ class BaseQueue:
     @lamda.setter
     def lamda(self, lamda):
         self.recalc_needed = True
-        if self.is_valid(lamda, self.mu):
-            self._lamda = lamda
+
+        if isiterable(lamda):
+            wlamda = tuple(lamda)
+        else:
+            wlamda = (lamda,)
+
+        if all([isinstance(a, Number) and a > 0 for a in wlamda]):
+            self._lamda = self._simplify_lamda(lamda)
         else:
             self._lamda = math.nan
 
@@ -65,34 +56,25 @@ class BaseQueue:
     @mu.setter
     def mu(self, mu):
         self.recalc_needed = True
-        if self.is_valid(self.lamda, mu):
+        if isinstance(mu, Number) and mu > 0:
             self._mu = mu
         else:
             self._mu = math.nan
 
     @property
     def lq(self):
-        if self.recalc_needed == True:
-            self.calc_metrics()
-            self.recalc_needed = False
-
-        if self.is_feasible(self.lamda, self.mu):
-            return self._lq
-        else:
-            return math.inf
+        if self._recalc_needed:
+            self._calc_metrics()
+            self._recalc_needed = False
+        return self._lq
 
     @property
     def p0(self):
-        if self.recalc_needed == True:
-            self.calc_metrics()
-            self.recalc_needed = False
+        if self._recalc_needed:
+            self._calc_metrics()
+            self._recalc_needed = False
+        return self._p0
 
-        if self.is_feasible(self.lamda, self.mu):
-            return self._p0
-        else:
-            return math.inf
-
-    #TODO: does order of declaration matter here?
     @property
     def l(self):
         return self.lq + self.r
@@ -103,11 +85,7 @@ class BaseQueue:
 
     @property
     def ro(self):
-        #TODO: is this appropriate? would I have to do this for every setter
-        # that uses lamda
-        wlamda = self.simplify_lamda(self.lamda)
-        #TODO: since BaseQueue assumes c = 1, then the "c" attribute wouldn't be present here?
-        return wlamda / self.mu
+        return self.r
 
     @property
     def w(self):
@@ -119,67 +97,35 @@ class BaseQueue:
 
     @property
     def utilization(self):
-        return self.lamda / self.mu
+        return self.ro
 
-    def is_valid(self, lamda, mu, c=1) -> bool:
+    def is_valid(self) -> bool:
         """
-        Checks to see if all arguments are numerical.
-        Checks to see if value of arguments are within the valid range for queue calculations.
-        Streamlined version of is_valid that is used was given to us as feedback by Dr. Mitchell.
+        Checks to see if lamda and mu are not nan
 
-        Args:
-            lamda (number): arrival rate of customers per time interval (scalar or multivalued)
-            mu (number): service rate per time interval (scalar)
-            c (number): number of servers in the system (scalar)
-
-        Returns: True if all arguments are valid, False if any argument is invalid
+        Returns: True if all arguments are valid, False if any argument is nan
         """
-        # Check to see is lamda is iterable. If lamda is a single value, bundle it into a single
-        # value tuple so that we can treat all cases of lamda the same
-        # If lamda is an iterable, coerce it into a tuple as well so we can bundle it with
-        # the other arguments
-        #TODO: simplify lamda?
-        if isiterable(lamda):
-            wlamda = tuple(lamda)
-        else:
-            wlamda = (lamda,)
-
-        # Combine args into a single tuple so that we can check to see if all arguments are
-        # numbers and greater than 0 once.
-        args = (mu, c, *wlamda)
-
-        if all([isinstance(a, Number) and a > 0 for a in args]):
-            return True
-
-        else:
-            return False
-
-    def is_feasible(self, lamda, mu, c=1) -> bool:
-        """
-        Calculates rho (ρ) and checks to see if the value of rho is feasible.
-        rho must be a value between 0 and 1.
-        rho = lamda / mu * c
-
-        Args:
-            lamda (number): arrival rate of customers per time interval (scalar or multivalued)
-            mu (number): service rate per time interval (scalar)
-            c (number): number of servers in the system (scalar)
-
-        Returns: True if rho is feasible False if rho is not feasible
-        """
-        # Check to see if all values are valid
-        if not self.is_valid(lamda, mu, c):
-            return False
-
-        # Check to see if 0 < rho < 1 because rho is a percentage of time a server is busy
-        # Since is_valid() already ensures that lamda, mu, and c are non-negative values, we only need to check
-        # to see if rho is less than 1.
-        if self.ro < 1:
+        if math.isnan(self._lamda) or math.isnan(self.mu):
             return False
 
         return True
 
-    def simplify_lamda(self, lamda) -> float:
+    def is_feasible(self) -> bool:
+        """
+        Checks to see if rho is not inf
+
+        Returns: True if rho is not inf and False if rho is inf
+        """
+        # Check to see if all values are valid
+        if not self.is_valid():
+            return False
+
+        if self.ro > 1:
+            return False
+
+        return True
+
+    def _simplify_lamda(self, lamda) -> float:
         """
         Helper function that checks to see if lamda is iterable and aggregates it.
         Args:
@@ -193,13 +139,23 @@ class BaseQueue:
         else:
             return lamda
 
-    def calc_metrics(self):
+    def _calc_metrics(self):
         """
-        Calculates and stores  , the average number of customers waiting,
+        Calculates and stores the average number of customers waiting,
         and p_0 , the probability of an empty system, for the queue.
         This is called whenever lamda or mu is set or changed.
 
         Returns: None
 
         """
-        #TODO
+        if not self.is_valid():
+            self._lamda = math.nan
+            self._p0 = math.nan
+
+        if not self.is_feasible():
+            self._lamda = math.inf
+            self._p0 = math.inf
+
+        self._lamda = math.nan
+        self._p0 = math.nan
+        self._recalc_needed = False
