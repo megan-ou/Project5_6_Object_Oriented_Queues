@@ -1,7 +1,7 @@
 import BaseQueue
 import math
 
-class MM1Queue(BaseQueue):
+class MM1Queue(BaseQueue.BaseQueue):
     """
     #TODO: add a class desc. here
     """

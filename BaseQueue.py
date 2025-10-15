@@ -4,7 +4,7 @@ from numbers import Number
 
 class BaseQueue:
     """
-    Base queue class that holds all the attributes of a M/M/1 Queue.
+    Base queue class that holds all the attributes of a standard queue.
     Contains the values that result from Little's Laws calculations.
     Checks for validity and feasibility of inputs.
     This is the inheritable class.
@@ -43,7 +43,7 @@ class BaseQueue:
 
     @lamda.setter
     def lamda(self, lamda):
-        self.recalc_needed = True
+        self._recalc_needed = True
 
         if isiterable(lamda):
             wlamda = tuple(lamda)
@@ -61,7 +61,7 @@ class BaseQueue:
 
     @mu.setter
     def mu(self, mu):
-        self.recalc_needed = True
+        self._recalc_needed = True
         if isinstance(mu, Number) and mu > 0:
             self._mu = mu
         else:
@@ -118,9 +118,9 @@ class BaseQueue:
 
     def is_feasible(self) -> bool:
         """
-        Checks to see if rho is not inf
+        Checks to see if rho is within range of 0 < rho < 1
 
-        Returns: True if rho is not inf and False if rho is inf
+        Returns: True if rho is in range and False if rho is out of range
         """
         # Check to see if all values are valid
         if not self.is_valid():
@@ -155,13 +155,16 @@ class BaseQueue:
 
         """
         if not self.is_valid():
-            self._lamda = math.nan
+            self._lq = math.nan
             self._p0 = math.nan
+            return
 
         if not self.is_feasible():
-            self._lamda = math.inf
+            self._lq = math.inf
             self._p0 = math.inf
+            return
 
-        self._lamda = math.nan
+        self._lq = math.nan
         self._p0 = math.nan
+
         self._recalc_needed = False
