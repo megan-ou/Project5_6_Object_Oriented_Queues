@@ -2,6 +2,9 @@ import BaseQueue
 import math
 
 class MM1Queue(BaseQueue):
+    """
+    #TODO: add a class desc. here
+    """
     def _calc_metrics(self):
         """
         Calculates and stores the average number of customers waiting,
