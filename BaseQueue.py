@@ -18,8 +18,8 @@ class BaseQueue:
         """
         self.lamda = lamda
         self.mu = mu
-        self._lq = None
-        self._p0 = None
+        self._lq = math.nan
+        self._p0 = math.nan
         self._recalc_needed = False
 
     def __str__(self):
@@ -28,8 +28,14 @@ class BaseQueue:
         Returns: String
 
         """
-        #TODO
-
+        print(f'BaseQueue instance at {id(self)}'
+              f'\n\t lamda: {self.lamda}'
+              f'\n\t mu: {self.mu}'
+              f'\n\t P0: {self.p0}'
+              f'\n\t lq: {self.lq}'
+              f'\n\t l: {self.l}'
+              f'\n\t wq: {self.wq}'
+              f'\n\t w: {self.w}')
 
     @property
     def lamda(self):
@@ -120,7 +126,7 @@ class BaseQueue:
         if not self.is_valid():
             return False
 
-        if self.ro > 1:
+        if self.ro >= 1:
             return False
 
         return True
