@@ -13,12 +13,13 @@ class MMcQueue(BaseQueue.BaseQueue):
         """
         Constructor for MMC queue class. Uses the same arguments as parent class with the addition of c.
         Args:
+            lamda (number): average rate of arrival (scalar or iterable)
+            mu (number): average rate of service completion
             c (number): number of servers in the queue
         """
         super().__init__(lamda, mu)
         self.c = c
         self._calc_metrics()
-        self._recalc_needed = False
 
     def __str__(self):
         """
@@ -39,10 +40,20 @@ class MMcQueue(BaseQueue.BaseQueue):
 
     @property
     def c(self):
+        """
+        Getter method for property c
+        Returns: the number of servers
+        """
         return self._c
 
     @c.setter
     def c(self, c):
+        """
+        Setter method for property c; does error checking on the argument.
+        Args:
+            c (number): number of servers
+        Returns: None
+        """
         self._recalc_needed = True
         if isinstance(c, Number) and c > 0:
             self._c = c
@@ -51,6 +62,10 @@ class MMcQueue(BaseQueue.BaseQueue):
 
     @property
     def ro(self):
+        """
+        New getter method for property ro, takes into account different values of c.
+        Returns: utilization of queue or traffic intensity
+        """
         return self.r / self.c
 
     def is_valid(self) -> bool:

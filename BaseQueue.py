@@ -39,15 +39,29 @@ class BaseQueue:
 
     @property
     def lamda(self):
+        """
+        Getter method for lamda property
+        Returns: interarrival rate of customers
+        """
         return self._lamda
 
     @lamda.setter
     def lamda(self, lamda):
+        """
+        Setter method for lamda property; does error checking on the argument
+        Args:
+            lamda (number): interarrival rate of customers to the queue
+        Returns: None
+        """
         self._recalc_needed = True
 
         if isiterable(lamda):
+            #Force lamda into a tuple so we can iterate through it when checking the values
+            # if it is already iterable
             wlamda = tuple(lamda)
         else:
+            #If there is a single lamda, bundle it into a single value tuple so it works with the
+            # code for iterable lamdas.
             wlamda = (lamda,)
 
         if all([isinstance(a, Number) and a > 0 for a in wlamda]):
@@ -57,10 +71,20 @@ class BaseQueue:
 
     @property
     def mu(self):
+        """
+        Getter method for mu property
+        Returns: average rate of service time
+        """
         return self._mu
 
     @mu.setter
     def mu(self, mu):
+        """
+        Setter method for mu property; does error checking
+        Args:
+            mu (number): average rate of service time
+        Returns: None
+        """
         self._recalc_needed = True
         if isinstance(mu, Number) and mu > 0:
             self._mu = mu
@@ -69,6 +93,10 @@ class BaseQueue:
 
     @property
     def lq(self):
+        """
+        Getter method for lq property. Values for lq are set in calc_metrics.
+        Returns: the average number of people waiting in the queue
+        """
         if self._recalc_needed:
             self._calc_metrics()
             self._recalc_needed = False
@@ -76,6 +104,10 @@ class BaseQueue:
 
     @property
     def p0(self):
+        """
+        Getter method for p0 property. Values for p0 are set in calc_metrics.
+        Returns: the probability of an empty queue
+        """
         if self._recalc_needed:
             self._calc_metrics()
             self._recalc_needed = False
@@ -83,26 +115,50 @@ class BaseQueue:
 
     @property
     def l(self):
+        """
+        Getter method for l property calculated using Little's Laws
+        Returns: average number of people in the system
+        """
         return self.lq + self.r
 
     @property
     def r(self):
+        """
+        Getter method for r property calculated using Little's Laws
+        Returns: expected number of customers in service
+        """
         return self.lamda / self.mu
 
     @property
     def ro(self):
+        """
+        Getter method for ro property calculated using Little's Laws
+        Returns: traffic intensity of the queue
+        """
         return self.r
 
     @property
     def w(self):
+        """
+        Getter method for w property calculated using Little's Laws
+        Returns: time spent in the system
+        """
         return self.l / self.lamda
 
     @property
     def wq(self):
+        """
+        Getter method for wq property calculated using Little's Laws
+        Returns: time spent waiting in the queue
+        """
         return self.lq / self.lamda
 
     @property
     def utilization(self):
+        """
+        Getter method for utilization property; another word for ro.
+        Returns: the value of ro, or the system utilization
+        """
         return self.ro
 
     def is_valid(self) -> bool:
@@ -164,6 +220,8 @@ class BaseQueue:
             self._p0 = math.inf
             return
 
+        #This is in place of an abstract class. Sets the value of lq and p0 to math.nan since a base queue
+        # does not have an lq or p0 formula.
         self._lq = math.nan
         self._p0 = math.nan
 
