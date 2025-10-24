@@ -13,13 +13,8 @@ class TestMMcQueue(TestCase):
         self.assertAlmostEqual(15, self.queue._lamda)
         self.assertAlmostEqual(20, self.queue._mu)
         self.assertAlmostEqual(2, self.queue._c)
+        self.assertTrue(self.queue._recalc_needed)
 
-        expected_p0 = 1.0 / (1.0 + 0.75 + (0.75**2) / (2 * (1 - 0.375)))
-        expected_lq = ((0.75**2) * 0.375) / (2 * (1 - 0.375) ** 2) * expected_p0
-
-        self.assertAlmostEqual(expected_p0, self.queue._p0)
-        self.assertAlmostEqual(expected_lq, self.queue._lq)
-        self.assertFalse(self.queue._recalc_needed)
 
     def test_c_property(self):
         #getter

@@ -11,13 +11,7 @@ class TestMM1Queue(TestCase):
         #Test for init works
         self.assertAlmostEqual(15, self.queue._lamda)
         self.assertAlmostEqual(20, self.queue._mu)
-
-        #Check metrics computed for MM1
-        expected_lq = (15 ** 2) / (20 * (20 - 15))
-        expected_p0 = 1 - 15 / 20
-        self.assertAlmostEqual(expected_lq, self.queue._lq)
-        self.assertAlmostEqual(expected_p0, self.queue._p0)
-        self.assertFalse(self.queue._recalc_needed)
+        self.assertTrue(self.queue._recalc_needed)
 
     def test_lq_formula_and_recalc(self):
         #Baseline check

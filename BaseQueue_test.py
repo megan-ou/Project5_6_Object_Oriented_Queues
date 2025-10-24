@@ -4,20 +4,20 @@ import BaseQueue as q
 
 class TestBaseQueue(TestCase):
     def setUp(self):
-        self.queue = q.BaseQueue(20, 15)
+        self.queue = q.BaseQueue(15, 20)
 
     def test_init(self):
         #Before seeing Dr. Mitchell's test cases, I used self.queue.lamda, but that would test the setter/getter
         # I think we want to test to see if init calls the proper setters and everything works.
-        self.assertAlmostEqual(20, self.queue._lamda)
-        self.assertAlmostEqual(15, self.queue._mu)
+        self.assertAlmostEqual(15, self.queue._lamda)
+        self.assertAlmostEqual(20, self.queue._mu)
         self.assertTrue(math.isnan(self.queue._lq))
         self.assertTrue(math.isnan(self.queue._p0))
-        self.assertFalse(self.queue._recalc_needed)
+        self.assertTrue(self.queue._recalc_needed)
 
     def test_lamda(self):
         #First test the getter method
-        self.assertAlmostEqual(20, self.queue.lamda)
+        self.assertAlmostEqual(15, self.queue.lamda)
 
         #Now test the setters
         #Valid tuple value, see if it aggregates
@@ -54,7 +54,7 @@ class TestBaseQueue(TestCase):
 
     def test_mu(self):
         #First test the getter method
-        self.assertAlmostEqual(15, self.queue.mu)
+        self.assertAlmostEqual(20, self.queue.mu)
 
         #Now test the setter method
         #Valid value
