@@ -19,7 +19,6 @@ class MMcQueue(BaseQueue.BaseQueue):
         """
         super().__init__(lamda, mu)
         self.c = c
-        self._calc_metrics()
 
     def __str__(self):
         """

@@ -17,7 +17,6 @@ class MM1Queue(BaseQueue.BaseQueue):
             mu (number): average rate of service completion
         """
         super().__init__(lamda, mu)
-        self._calc_metrics()
 
     def __str__(self):
         """

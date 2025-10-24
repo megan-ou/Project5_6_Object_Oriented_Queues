@@ -16,17 +16,16 @@ class BaseQueue:
             lamda (number): average rate of arrival (scalar or iterable)
             mu (number): average rate of service completion
         """
+        self._recalc_needed = False
         self.lamda = lamda
         self.mu = mu
         self._lq = math.nan
         self._p0 = math.nan
-        self._recalc_needed = False
 
     def __str__(self):
         """
         Method that returns a string representation of a queue's object state.
         Returns: String
-
         """
         print(f'BaseQueue instance at {id(self)}'
               f'\n\t lamda: {self.lamda}'
