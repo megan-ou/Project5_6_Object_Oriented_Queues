@@ -19,8 +19,8 @@ class BaseQueue:
         self._recalc_needed = False
         self.lamda = lamda
         self.mu = mu
-        self._lq = math.nan
-        self._p0 = math.nan
+        #self._lq = math.nan
+        #self._p0 = math.nan
 
     def __str__(self):
         """
@@ -57,13 +57,13 @@ class BaseQueue:
         if isiterable(lamda):
             #Force lamda into a tuple so we can iterate through it when checking the values
             # if it is already iterable
-            wlamda = tuple(lamda)
+            wlamda = lamda
         else:
             #If there is a single lamda, bundle it into a single value tuple so it works with the
             # code for iterable lamdas.
             wlamda = (lamda,)
 
-        if all([isinstance(a, Number) and a > 0 for a in wlamda]):
+        if all([isinstance(l, Number) and l > 0 for l in wlamda]):
             self._lamda = self._simplify_lamda(lamda)
         else:
             self._lamda = math.nan

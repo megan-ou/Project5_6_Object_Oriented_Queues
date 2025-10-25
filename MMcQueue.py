@@ -126,9 +126,7 @@ class MMcQueue(BaseQueue.BaseQueue):
         else:
             #Multiserver calculations separate from single server calculations since the formulas are different.
             #P0 calculated first so that lq calculation can use the calculated p0 metric.
-            p0_term_1 = 0
-            for i in range(0, self.c):
-                p0_term_1 += (self.r ** i) / math.factorial(i)
+            p0_term_1 = sum([(self.r ** i) / math.factorial(i) for i in range(self.c)])
             p0_term_2 = (self.r ** self.c) / (math.factorial(self.c) * (1 - self.ro))
             self._p0 = 1.0 / (p0_term_1 + p0_term_2)
 

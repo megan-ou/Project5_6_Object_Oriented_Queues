@@ -11,8 +11,6 @@ class TestBaseQueue(TestCase):
         # I think we want to test to see if init calls the proper setters and everything works.
         self.assertAlmostEqual(15, self.queue._lamda)
         self.assertAlmostEqual(20, self.queue._mu)
-        self.assertTrue(math.isnan(self.queue._lq))
-        self.assertTrue(math.isnan(self.queue._p0))
         self.assertTrue(self.queue._recalc_needed)
 
     def test_lamda(self):
