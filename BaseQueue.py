@@ -55,8 +55,6 @@ class BaseQueue:
         self._recalc_needed = True
 
         if isiterable(lamda):
-            #Force lamda into a tuple so we can iterate through it when checking the values
-            # if it is already iterable
             wlamda = lamda
         else:
             #If there is a single lamda, bundle it into a single value tuple so it works with the
