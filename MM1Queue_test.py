@@ -69,18 +69,27 @@ class TestMM1Queue(TestCase):
         #On access, _calc_metrics should set NaNs
         self.assertTrue(math.isnan(self.queue.lq))
         self.assertTrue(math.isnan(self.queue.p0))
+        self.assertTrue(math.isnan(self.queue.l))
+        self.assertTrue(math.isnan(self.queue.wq))
+        self.assertTrue(math.isnan(self.queue.w))
 
         #Invalid lamda
         self.queue.lamda = 0
         self.queue.mu = 10
         self.assertTrue(math.isnan(self.queue.lq))
         self.assertTrue(math.isnan(self.queue.p0))
+        self.assertTrue(math.isnan(self.queue.l))
+        self.assertTrue(math.isnan(self.queue.wq))
+        self.assertTrue(math.isnan(self.queue.w))
 
         #Non-numeric inputs
         self.queue.lamda = "5"
         self.queue.mu = 10
         self.assertTrue(math.isnan(self.queue.lq))
         self.assertTrue(math.isnan(self.queue.p0))
+        self.assertTrue(math.isnan(self.queue.l))
+        self.assertTrue(math.isnan(self.queue.wq))
+        self.assertTrue(math.isnan(self.queue.w))
 
     def test_is_valid_and_is_feasible(self):
         #Valid, feasible inputs
