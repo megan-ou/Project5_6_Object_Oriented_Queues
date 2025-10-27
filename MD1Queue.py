@@ -3,7 +3,7 @@ import math
 
 class MD1Queue(BaseQueue.BaseQueue):
     """
-    MD1 queue: single server with Poisson arrivals and deterministic service times.
+    MD1 queue is single server with Poisson arrivals and deterministic service times.
     Equivalent to half of Lq and MM1 queue with same lamda and mu.
     """
 
@@ -13,14 +13,14 @@ class MD1Queue(BaseQueue.BaseQueue):
     def __str__(self):
         return (
             f'MD1Queue instance at {id(self)}'
-            f'\n\t λ: {self.lamda}'
-            f'\n\t μ: {self.mu}'
-            f'\n\t ρ: {self.ro}'
+            f'\n\t lamda: {self.lamda}'
+            f'\n\t mu: {self.mu}'
+            f'\n\t p: {self.ro}'
             f'\n\t P0: {self.p0}'
             f'\n\t Lq: {self.lq}'
-            f'\n\t L: {self.l}'
+            f'\n\t l: {self.l}'
             f'\n\t Wq: {self.wq}'
-            f'\n\t W: {self.w}'
+            f'\n\t w: {self.w}'
         )
 
     def _calc_metrics(self):
