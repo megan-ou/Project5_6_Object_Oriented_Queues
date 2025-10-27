@@ -1,5 +1,3 @@
-from dis import RETURN_CONST
-
 import BaseQueue
 import math
 
@@ -36,8 +34,8 @@ class MD1Queue(BaseQueue.BaseQueue):
             return
 
         if not self.is_feasible():
-            self._lq = math.nan
-            self._p0 = math.nan
+            self._lq = math.inf
+            self._p0 = math.inf
             self._recalc_needed = False
             return
 
