@@ -56,12 +56,9 @@ class MM1Queue(BaseQueue.BaseQueue):
 
         #lq calculation based on single server queue
         denominator = self.mu * (self.mu - self.lamda)
-        if denominator == 0:
-            self._lq = math.nan
-        else:
-            self._lq = self.lamda ** 2 / denominator
+        self._lq = self.lamda ** 2 / denominator
 
         #p0 calculation based on single server queue
         #can also use self.ro here instead of self.lamda / self.mu (megan)
-        self._p0 = 1 - self.lamda / self.mu
+        self._p0 = 1 - self.ro
         self._recalc_needed = False
