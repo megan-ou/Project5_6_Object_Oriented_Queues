@@ -23,14 +23,57 @@ class MMcPriorityQueue(MMcQueue.MMcQueue):
             c (number): number of servers in the queue
         """
         super().__init__(lamda,mu,c)
-        self.lamda_k = lamda
 
     def __str__(self):
         """
-        Method that returns a string representation of a queue's object state.
-        Returns: String
+        Method that prints a string representation of a queue's object state.
+        Returns: None
         """
-        pass
+        print(f'MMcPriorityQueue instance at {id(self)}'
+              f'\n\t lamda: {self.lamda}'
+              f'\n\t lamda_k: {self.lamda_k}'
+              f'\n\t mu: {self.mu}'
+              f'\n\t P0: {self.p0}'
+              f'\n\t lq: {self.lq}'
+              f'\n\t l: {self.l}'
+              f'\n\t wq: {self.wq}'
+              f'\n\t w: {self.w}'
+              f'\n\t c: {self.c}')
+
+    @property
+    def lamda(self):
+        """
+        Getter method for lamda property; by overring the lamda setter, I was unsure whether or not
+        I need to redefine lamda. I was unsure how to override the setter alone
+        Returns: interarrival rate of customers
+        """
+        return self._lamda
+
+    @lamda.setter
+    def lamda(self,lamda_k):
+        """
+        Setter method for lamda property; does error checking on the argument. Overridden method
+        to include lamda_k
+        Args:
+            lamda_k (number): interarrival rate of customers to the queue
+        Returns: None
+        """
+        if isiterable(lamda_k):
+            wlamda = lamda_k
+        else:
+            # If there is a single lamda, bundle it into a single value tuple so it works with the
+            # code for iterable lamdas.
+            wlamda = (lamda_k,)
+
+        if all([isinstance(l, Number) and l > 0 for l in wlamda]):
+            self._lamda = self._simplify_lamda(lamda_k)
+            self._lamda_k = lamda_k
+        else:
+            self._lamda = math.nan
+            # instead of assigning the entire lamda_k to math.nan, go in and assign each index to math.nan
+            # to keep lamda_k iterable
+            self._lamda_k = [math.nan for _ in wlamda]
+
 
     @property
     def lamda_k(self):
@@ -46,24 +89,12 @@ class MMcPriorityQueue(MMcQueue.MMcQueue):
     @lamda_k.setter
     def lamda_k(self, lamda_k):
         """
-        Setter method for lamda_k; does error checking on the argument. Uses same
-        argument checking as lamda, but does NOT aggregate lamda.
+        Setter method for lamda_k; just calls the lamda setter that has been overridden to handle
+        lamda_k
 
         Returns: None
         """
-        if isiterable(lamda_k):
-            wlamda = lamda_k
-        else:
-            #If there is a single lamda, bundle it into a single value tuple so it works with the
-            # list comprehension
-            wlamda = (lamda_k,)
-
-        if all([isinstance(l, Number) and l > 0 for l in wlamda]):
-            self._lamda_k = lamda_k
-        else:
-            #instead of assigning the entire lamda_k to math.nan, go in and assign each index to math.nan
-            # to keep lamda_k iterable
-            self._lamda_k = [math.nan for _ in wlamda]
+        self.lamda = lamda_k
 
     def get_b_k(self, k):
         """
