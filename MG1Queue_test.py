@@ -113,7 +113,6 @@ class TestMG1Queue(TestCase):
         #check is recalc_needed is false
         self.assertFalse(self.queue._recalc_needed)
 
-
     def test_properties(self):
         """
         Tests all queue attributes & if they inherit/calculate properly with a valid and feasible
