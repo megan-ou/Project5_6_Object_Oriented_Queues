@@ -58,20 +58,6 @@ class MG1Queue(BaseQueue.BaseQueue):
             return False
         return not math.isnan(self.sigma)
 
-    def is_feasible(self) -> bool:
-        """
-        Checks whether the MG1 queue system is feasible.
-        Returns: True if lamda / mu < 1. False otherwise.
-        """
-        #lamda, mu must be valid numbers
-        if math.isnan(self.lamda) or math.isnan(self.mu):
-            return False
-
-        if self.mu <= 0:
-            return False
-        rho = self.lamda / self.mu
-        return rho < 1
-
     def _calc_metrics(self):
         #Compute Lq and P0 for MG1
         if not self.is_valid():
