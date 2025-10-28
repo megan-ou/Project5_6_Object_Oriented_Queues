@@ -129,7 +129,7 @@ class MMcPriorityQueue(MMcQueue.MMcQueue):
             k (number): priority class number
         Returns: average number of priority class k customers in the system
         """
-        if not isinstance(k, Number) or k < 0 or k > len(self.lamda_k):
+        if not isinstance(k, Number) or k <= 0 or k > len(self.lamda_k):
             # k cannot be longer than lamda because it will reference indexes that do not exist
             return math.nan
 
