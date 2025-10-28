@@ -3,17 +3,25 @@ import math
 
 class MD1Queue(BaseQueue.BaseQueue):
     """
-    MD1 queue is single server with Poisson arrivals and deterministic service times.
-    Equivalent to half of Lq and MM1 queue with same lamda and mu.
+    MD1Queue implements an MM1 queue with Poisson arrivals and deterministic service times.
+    Contains the values that result from Little's Laws calculations.
+    Checks validity and feasibility of inputs.
     """
-    #TODO: please add header comments for each method! also I'm not sure what you mean by
-    # equal to half of Lq and MM1 queue with same lamda and mu, I think you can strike that
-    # part?
-
     def __init__(self, lamda, mu):
+        """
+        Constructor for MD1 Priority queue class.
+        Uses the same arguments as MM1 queue with no additional parameters.
+        Args:
+            lamda (number): average rate of arrival (scalar or iterable)
+            mu (number): average rate of service completion
+        """
         super().__init__(lamda, mu)
 
     def __str__(self):
+        """
+        Method that prints a string representation of a queue's object state.
+        Returns: None
+        """
         return (
             f'MD1Queue instance at {id(self)}'
             f'\n\t lamda: {self.lamda}'

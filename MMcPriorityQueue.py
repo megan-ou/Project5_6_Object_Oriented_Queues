@@ -42,11 +42,7 @@ class MMcPriorityQueue(MMcQueue.MMcQueue):
 
     @property
     def lamda(self):
-        """
-        Getter method for lamda property; by overring the lamda setter, I was unsure whether or not
-        I need to redefine lamda. I was unsure how to override the setter alone
-        Returns: interarrival rate of customers
-        """
+
         return self._lamda
 
     @lamda.setter

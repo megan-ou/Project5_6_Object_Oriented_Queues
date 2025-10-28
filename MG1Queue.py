@@ -4,8 +4,9 @@ from numbers import Number
 
 class MG1Queue(BaseQueue.BaseQueue):
     """
-    MG1 queue is singler server with
-    Poisson arrivals (regardless of service time distribution type)
+    MG1 queue applies to any single server queue with Poisson arrivals (regardless of service time distribution type).
+    Contains the values that result from Little's Laws calculations.
+    Calculates metrics using the Checks validity and feasibility of inputs.
     """
     def __init__(self, lamda, mu, sigma = 0.0):
         super().__init__(lamda, mu)
