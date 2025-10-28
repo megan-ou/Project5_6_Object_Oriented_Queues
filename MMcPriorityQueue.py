@@ -195,7 +195,7 @@ class MMcPriorityQueue(MMcQueue.MMcQueue):
             return math.inf
 
         #Use k-1 because indexing starts at 0.
-        ro_k = sum([self.get_lamda_k(i)/(self.mu * self.c) for i in k-1])
+        ro_k = sum(self.get_lamda_k(i) / (self.mu * self.c) for i in range(1, k + 1))
         return ro_k
 
     def get_w_k(self, k):
