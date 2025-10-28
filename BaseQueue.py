@@ -19,8 +19,6 @@ class BaseQueue:
         self._recalc_needed = False
         self.lamda = lamda
         self.mu = mu
-        #self._lq = math.nan
-        #self._p0 = math.nan
 
     def __str__(self):
         """
