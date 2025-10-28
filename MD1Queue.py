@@ -6,6 +6,9 @@ class MD1Queue(BaseQueue.BaseQueue):
     MD1 queue is single server with Poisson arrivals and deterministic service times.
     Equivalent to half of Lq and MM1 queue with same lamda and mu.
     """
+    #TODO: please add header comments for each method! also I'm not sure what you mean by
+    # equal to half of Lq and MM1 queue with same lamda and mu, I think you can strike that
+    # part?
 
     def __init__(self, lamda, mu):
         super().__init__(lamda, mu)
