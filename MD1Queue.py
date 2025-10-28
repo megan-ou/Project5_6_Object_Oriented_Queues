@@ -14,12 +14,13 @@ class MD1Queue(BaseQueue.BaseQueue):
         Args:
             lamda (number): average rate of arrival (scalar or iterable)
             mu (number): average rate of service completion
+        Returns: None
         """
         super().__init__(lamda, mu)
 
     def __str__(self):
         """
-        Method that prints a string representation of a queue's object state.
+        Method that prints a string representation of an MD1 queue's object state.
         Returns: None
         """
         return (
@@ -37,6 +38,7 @@ class MD1Queue(BaseQueue.BaseQueue):
     def _calc_metrics(self):
         """
         Calculates Lq and P0 of MD1 queue
+        Returns: None
         """
         if not self.is_valid():
             self._lq = math.nan

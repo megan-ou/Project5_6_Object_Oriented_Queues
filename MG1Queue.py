@@ -41,10 +41,15 @@ class MG1Queue(BaseQueue.BaseQueue):
 
     @sigma.setter
     def sigma(self, val):
+        """
+        Setter method for sigma property
+        Args:
+            val (number): value that you want to assign to sigma
+        Returns: None
+        """
         self._recalc_needed = True
         if isinstance(val, Number) and val >= 0:
-            #TODO: I do not believe you need to force val into a float
-            self._sigma = float(val)
+            self._sigma = val
         else:
             self._sigma = math.nan
 
