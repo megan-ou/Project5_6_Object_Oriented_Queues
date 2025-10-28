@@ -8,7 +8,7 @@ class MG1Queue(BaseQueue.BaseQueue):
     Poisson arrivals (regardless of service time distribution type)
     """
     #TODO: Hi could you please add header comments for each method?
-    def __init__(self, lamda, mu, sigma):
+    def __init__(self, lamda, mu, sigma = 0.0):
         #TODO: Toby, you shoudl delete line 15 as it defeats the purpose of Object Oriented,
         # since you defined sigma as a property, you do not need to define it
         # in the constructor (Megan)
