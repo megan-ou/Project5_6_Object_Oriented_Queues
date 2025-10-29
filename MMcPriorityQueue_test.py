@@ -114,4 +114,3 @@ class TestMMcPriorityQueue(TestCase):
         #test invalid values
         self.assertTrue(math.isnan(self.queue.get_wq_k(0)))
         self.assertTrue(math.isnan(self.queue.get_wq_k(4)))
-
